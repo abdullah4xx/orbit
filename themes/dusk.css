@@ -1,0 +1,7 @@
+/* scheme: dark */
+:root {
+  --strip: #120f24; --surface: #1d1936; --raised: #262046; --field: #14112b;
+  --hover: rgba(255,255,255,.09); --press: rgba(255,255,255,.16);
+  --text: #ece8ff; --text-dim: #a39dc8; --accent: #ff7eb6; --accent-ink: #2a0a1b;
+  --line: #352e5c; --danger: #ff7a7a; --page-bg: #171330; --radius: 12px;
+}

@@ -1,0 +1,37 @@
+{
+  "name": "orbit-browser",
+  "productName": "Orbit",
+  "version": "0.1.0",
+  "description": "A browser whose whole interface is HTML and CSS that you control",
+  "main": "main.js",
+  "author": "Orbit <orbit@localhost>",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "test": "node tests/run.js",
+    "dist": "electron-builder --linux deb"
+  },
+  "devDependencies": {
+    "electron": "^43.0.0",
+    "electron-builder": "^26.0.0"
+  },
+  "build": {
+    "appId": "dev.orbit.browser",
+    "productName": "Orbit",
+    "directories": { "output": "dist", "buildResources": "build" },
+    "files": ["main.js", "preload-*.js", "lib/**", "ui/**", "themes/**", "extensions/**", "build/icon.png", "package.json"],
+    "linux": {
+      "target": ["deb"],
+      "category": "Network",
+      "icon": "build/icon.png",
+      "executableName": "orbit-browser",
+      "maintainer": "Orbit <orbit@localhost>",
+      "synopsis": "Web browser with a fully customisable interface",
+      "mimeTypes": ["x-scheme-handler/http", "x-scheme-handler/https", "text/html"]
+    },
+    "deb": {
+      "packageName": "orbit-browser",
+      "depends": ["libgtk-3-0", "libnotify4", "libnss3", "libxss1", "libxtst6", "xdg-utils", "libatspi2.0-0", "libuuid1", "libsecret-1-0"]
+    }
+  }
+}
