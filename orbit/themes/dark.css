@@ -1,7 +1,0 @@
-/* scheme: dark */
-:root {
-  --strip: #0e1116; --surface: #1a1f27; --raised: #222833; --field: #10141a;
-  --hover: rgba(255,255,255,.08); --press: rgba(255,255,255,.14);
-  --text: #e8e6e1; --text-dim: #98a0ac; --accent: #e0a63a; --accent-ink: #1a1304;
-  --line: #2c333e; --danger: #e8655f; --page-bg: #14181e;
-}
