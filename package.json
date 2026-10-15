@@ -4,16 +4,20 @@
   "version": "0.1.0",
   "description": "A browser whose whole interface is HTML and CSS that you control",
   "main": "main.js",
+  "desktopName": "orbit-browser.desktop",
   "author": "Orbit <orbit@localhost>",
   "license": "MIT",
   "scripts": {
     "start": "electron .",
     "test": "node tests/run.js",
-    "dist": "electron-builder --linux deb"
+    "dist": "electron-builder --linux deb --publish never"
   },
   "devDependencies": {
     "electron": "^43.0.0",
     "electron-builder": "^26.0.0"
+  },
+  "overrides": {
+    "node-abi": ">=4.0.0 <4.38.0"
   },
   "build": {
     "appId": "dev.orbit.browser",
