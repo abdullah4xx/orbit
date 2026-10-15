@@ -1,0 +1,2 @@
+html { filter: invert(1) hue-rotate(180deg) !important; background: #fff; }
+img, picture, video, canvas, svg image, [style*="background-image"] { filter: invert(1) hue-rotate(180deg) !important; }

@@ -1,0 +1,17 @@
+<!doctype html><html lang="en"><head><title>Extensions</title><meta charset="utf-8"><link rel="stylesheet" href="orbit://ui/base.css"><link rel="stylesheet" id="theme" href="orbit://theme/current.css"><link rel="stylesheet" href="orbit://ui/page.css"></head><body>
+<div class="wrap">
+  <div style="display:flex;align-items:center;gap:12px"><h1 style="flex:1">Extensions</h1><button class="btn" id="open">Open extensions folder</button></div>
+  <p class="muted">An extension is a folder with a <code>manifest.json</code> and scripts/styles that Orbit injects into pages. Put your folders in the extensions folder and reload this page.</p>
+  <div id="list"></div>
+  <div class="card"><h2>Example manifest.json</h2>
+<pre>{
+  "name": "Hide cookie banners",
+  "version": "1.0",
+  "description": "Hides annoying overlays",
+  "matches": ["*://*.example.com/*"],
+  "run_at": "document_end",
+  "js": ["content.js"],
+  "css": ["style.css"]
+}</pre></div>
+</div>
+<script src="orbit://ui/lib.js"></script><script src="orbit://ui/extensions.js"></script></body></html>
