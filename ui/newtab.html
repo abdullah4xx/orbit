@@ -1,11 +1,39 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><title>New tab</title>
+<!doctype html><html lang="en" class="newtab-page"><head><meta charset="utf-8"><title>New tab</title>
 <link rel="stylesheet" href="orbit://ui/base.css"><link rel="stylesheet" id="theme" href="orbit://theme/current.css">
-<link rel="stylesheet" href="orbit://ui/page.css"><link rel="stylesheet" href="orbit://ui/newtab.css">
+<link rel="stylesheet" href="orbit://ui/newtab.css">
 </head><body>
-<main>
-  <h1 class="brand">Orbit</h1>
-  <form id="f"><input id="q" type="text" autofocus autocomplete="off" spellcheck="false" placeholder="Search or enter address"></form>
-  <div id="tiles"></div>
-</main>
-<script src="orbit://ui/lib.js"></script><script src="orbit://ui/newtab.js"></script>
+<div id="bg"></div><div id="shade"></div>
+<div id="app">
+  <header id="top">
+    <h1 id="brand" hidden></h1>
+    <div id="clock" hidden></div>
+    <div id="greet" hidden></div>
+    <form id="inline-search" hidden><input id="iq" type="text" autocomplete="off" spellcheck="false" placeholder="Search or enter address"></form>
+  </header>
+  <nav id="pages"></nav>
+  <main id="board"></main>
+  <div id="classic" hidden><div id="tiles"></div></div>
+</div>
+
+<div id="fab-right" class="fabs">
+  <button class="fab" id="f-search" title="Search (press /)"></button>
+  <button class="fab" id="f-downloads" title="Downloads folder"></button>
+  <button class="fab" id="f-private" title="New private window"></button>
+  <button class="fab" id="f-ext" title="Extensions"></button>
+  <button class="fab" id="f-clear" title="Clear browsing history"></button>
+  <button class="fab" id="f-eye" title="Hide cards"></button>
+  <button class="fab main" id="f-gear" title="Customise this page"></button>
+</div>
+<div id="fab-left" class="fabs">
+  <button class="fab" id="f-edit" title="Edit cards and links"></button>
+  <button class="fab" id="f-phone" title="Compact layout"></button>
+  <button class="fab" id="f-image" title="Change background"></button>
+  <input type="file" id="f-file" accept="image/png,image/jpeg,image/webp,image/gif,image/avif" hidden>
+</div>
+
+<div id="search-ov" hidden><form id="sf"><input id="sq" type="text" autocomplete="off" spellcheck="false" placeholder="Search or enter address"></form></div>
+<aside id="panel" hidden></aside>
+<div id="modal" hidden><form id="mform"></form></div>
+<div id="note" hidden></div>
+<script src="orbit://ui/icons.js"></script><script src="orbit://ui/lib.js"></script><script src="orbit://ui/newtab.js"></script>
 </body></html>

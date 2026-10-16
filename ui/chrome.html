@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-tabs="top" data-toolbar="top" data-bm="top" data-tabstyle="classic" data-titlebar="custom" data-winbtn="gnome" data-winside="right" data-sidecollapsed="0">
 <head>
 <meta charset="utf-8">
 <title>Orbit</title>
@@ -8,39 +8,53 @@
 <link rel="stylesheet" href="orbit://ui/chrome.css">
 </head>
 <body>
-<div id="bars">
-  <div id="tabstrip">
-    <div id="tabs"></div>
-    <button id="newtab" class="icon" title="New tab (Ctrl+T)"></button>
-  </div>
-  <div id="toolbar">
-    <button id="back" class="icon" title="Back (Alt+Left)"></button>
-    <button id="forward" class="icon" title="Forward (Alt+Right)"></button>
-    <button id="reload" class="icon" title="Reload (Ctrl+R)"></button>
-    <button id="home" class="icon" title="Home"></button>
-    <div id="omnibox">
-      <span id="secure" class="icon"></span>
-      <input id="url" type="text" spellcheck="false" autocomplete="off" placeholder="Search or enter address">
-      <button id="zoomchip" hidden title="Reset zoom"></button>
-      <button id="star" class="icon" title="Bookmark this page (Ctrl+D)"></button>
+<div id="app">
+  <div id="side">
+    <div id="sidetabs"></div>
+    <div id="sidefoot">
+      <button id="newtab-side" class="icon" title="New tab (Ctrl+T)"></button>
+      <span class="grow"></span>
+      <button id="sidetoggle" class="icon" title="Show icons only"></button>
     </div>
-    <button id="menu" class="icon" title="Menu"></button>
   </div>
-  <div id="progress"><i></i></div>
-  <div id="bmbar"></div>
-  <div id="findbar" hidden>
-    <input id="findinput" type="text" placeholder="Find in page" spellcheck="false">
-    <span id="findcount"></span>
-    <button id="findprev" class="icon" title="Previous"></button>
-    <button id="findnext" class="icon" title="Next"></button>
-    <button id="findclose" class="icon" title="Close"></button>
+  <div id="col">
+    <div id="tabstrip">
+      <div id="tabs"></div>
+      <button id="newtab" class="icon" title="New tab (Ctrl+T)"></button>
+    </div>
+    <div id="toolbar">
+      <button id="back" class="icon" title="Back (Alt+Left)"></button>
+      <button id="forward" class="icon" title="Forward (Alt+Right)"></button>
+      <button id="reload" class="icon" title="Reload (Ctrl+R)"></button>
+      <button id="home" class="icon" title="Home"></button>
+      <div id="omnibox">
+        <span id="secure" class="icon"></span>
+        <input id="url" type="text" spellcheck="false" autocomplete="off" placeholder="Search or enter address">
+        <button id="zoomchip" hidden title="Reset zoom"></button>
+        <button id="star" class="icon" title="Bookmark this page (Ctrl+D)"></button>
+      </div>
+      <span id="privbadge" hidden>Private</span>
+      <button id="menu" class="icon" title="Menu"></button>
+    </div>
+    <div id="progress"><i></i></div>
+    <div id="bmbar"></div>
+    <div id="findbar" hidden>
+      <input id="findinput" type="text" placeholder="Find in page" spellcheck="false">
+      <span id="findcount"></span>
+      <button id="findprev" class="icon" title="Previous"></button>
+      <button id="findnext" class="icon" title="Next"></button>
+      <button id="findclose" class="icon" title="Close"></button>
+    </div>
+    <div id="toast" hidden></div>
+    <div id="stage"><div id="viewport"></div></div>
   </div>
-  <div id="toast" hidden></div>
 </div>
+<div id="winctl"></div>
 <div id="scrim" hidden></div>
 <div id="popup" hidden></div>
 <script src="orbit://ui/icons.js"></script>
 <script src="orbit://ui/lib.js"></script>
 <script src="orbit://ui/chrome.js"></script>
+<script src="orbit://custom/chrome.js"></script>
 </body>
 </html>

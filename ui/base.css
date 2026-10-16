@@ -1,8 +1,13 @@
-/* Default design tokens. Themes (themes/*.css) and your custom.css override these. */
+/* Default design tokens. Themes (themes/*.css), orbit://appearance and your custom.css override these, in that order. */
 :root {
-  --font-ui: "Ubuntu", "Cantarell", "Noto Sans", system-ui, sans-serif;
+  --font-ui: var(--font-user, "Ubuntu", "Cantarell", "Noto Sans", system-ui, sans-serif);
   --strip: #0e1116; --surface: #1a1f27; --raised: #222833; --field: #10141a; --hover: rgba(255,255,255,.08); --press: rgba(255,255,255,.14);
   --text: #e8e6e1; --text-dim: #98a0ac; --accent: #e0a63a; --accent-ink: #1a1304; --line: #2c333e; --danger: #e8655f;
   --page-bg: #14181e; --radius: 9px;
-  --tabstrip-h: 38px; --toolbar-h: 44px; --bmbar-h: 30px;
+  --tabstrip-h: 38px; --toolbar-h: 44px; --bmbar-h: 30px; --omni-h: 34px;
+  /* parts of the browser frame that follow the tokens above until you give them a colour of their own */
+  --tab-active-bg: var(--surface); --toolbar-bg: var(--surface); --bmbar-bg: var(--surface); --omnibox-bg: var(--field); --frame: var(--strip);
+  --omni-radius: 999px; --page-gap: 0px; --page-radius: 0px; --ui-size: 13px; --tab-max: 230px; --side-w: 220px;
+  --icon-stroke: 1.8; --icon-size: 16px; --nt-brand-size: 44px;
 }
+svg[aria-hidden] { stroke-width: var(--icon-stroke); }

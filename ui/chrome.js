@@ -1,7 +1,7 @@
 (function () {
   'use strict';
   const call = (cmd, args) => orbit.call(cmd, args || {});
-  let S = { tabs: [], active: null, url: '', loading: false, canBack: false, canForward: false, zoom: 100, bookmarkId: null, bar: [], otherCount: 0, showBar: true };
+  let S = { tabs: [], active: null, url: '', loading: false, canBack: false, canForward: false, zoom: 100, bookmarkId: null, bar: [], otherCount: 0, showBar: true, look: {} };
   let editing = false;
   let suggestions = [];
   let selIdx = 0;
@@ -18,12 +18,66 @@
   const omni = $('#omnibox');
 
   // ---------------------------------------------------------------- icons
-  [['#newtab', 'plus'], ['#back', 'back'], ['#forward', 'forward'], ['#reload', 'reload'], ['#home', 'home'], ['#star', 'star'], ['#menu', 'dots'],
+  [['#newtab', 'plus'], ['#newtab-side', 'plus'], ['#sidetoggle', 'sidebar'], ['#back', 'back'], ['#forward', 'forward'], ['#reload', 'reload'], ['#home', 'home'], ['#star', 'star'], ['#menu', 'dots'],
     ['#findprev', 'up'], ['#findnext', 'down'], ['#findclose', 'x']].forEach(([s, n]) => { $(s).innerHTML = icon(n); });
 
   // ---------------------------------------------------------------- layout sync
-  function syncLayout() { call('chrome.layout', { height: $('#bars').offsetHeight, full: !popup.hidden }); }
-  new ResizeObserver(syncLayout).observe($('#bars'));
+  // This page fills the window. The web page is shown exactly where #viewport is, so every layout option is just CSS.
+  const root = document.documentElement;
+  let lastLayout = '';
+  let layoutQueued = false;
+  function syncLayout() {
+    const r = $('#viewport').getBoundingClientRect();
+    const payload = { viewport: { x: r.left, y: r.top, width: r.width, height: r.height }, popup: !popup.hidden };
+    const key = JSON.stringify(payload);
+    if (key === lastLayout) return;
+    lastLayout = key;
+    call('chrome.layout', payload);
+  }
+  function queueLayout() {
+    if (layoutQueued) return;
+    layoutQueued = true;
+    requestAnimationFrame(() => { layoutQueued = false; syncLayout(); });
+  }
+  new ResizeObserver(queueLayout).observe($('#viewport'));
+  window.addEventListener('resize', queueLayout);
+
+  const isVertical = () => S.look && (S.look.tabs === 'left' || S.look.tabs === 'right');
+
+  // ---------------------------------------------------------------- look
+  function topRow() {
+    const L = S.look || {};
+    if (L.tabs === 'top') return $('#tabstrip');
+    if (L.toolbar === 'top') return $('#toolbar');
+    if (S.showBar && L.bm === 'top') return $('#bmbar');
+    return isVertical() ? $('#side') : $('#toolbar');
+  }
+
+  function buildWinctl() {
+    const box = $('#winctl');
+    box.textContent = '';
+    [['minimize', 'win.minimize', 'Minimize'], ['maximize', 'win.maximize', 'Maximize'], ['close', 'win.close', 'Close']].forEach(([name, cmd, title]) => {
+      const b = el('button', { class: 'wb ' + name, title, onclick: () => call(cmd) });
+      b.innerHTML = icon(name);
+      box.append(b);
+    });
+  }
+
+  function applyLook() {
+    for (const [k, v] of Object.entries(S.look || {})) root.dataset[k] = v;
+    root.dataset.titlebar = S.frameless === false ? 'system' : 'custom';
+    root.classList.toggle('private', !!S.private);
+    root.classList.toggle('fullscreen', !!S.fullscreen);
+    $('#privbadge').hidden = !S.private;
+    const row = topRow();
+    const winctl = $('#winctl');
+    if (winctl.parentNode !== row) {
+      if (row.id === 'side') row.prepend(winctl); else row.append(winctl);
+    }
+    const mx = winctl.querySelector('.maximize, .restore');
+    if (mx) { mx.className = 'wb ' + (S.maximized ? 'restore' : 'maximize'); mx.title = S.maximized ? 'Restore' : 'Maximize'; mx.innerHTML = icon(S.maximized ? 'restore' : 'maximize'); }
+    root.style.setProperty('--winctl-w', root.dataset.titlebar === 'custom' && row.id === 'tabstrip' ? (winctl.offsetWidth || 0) + 'px' : '0px');
+  }
 
   // ---------------------------------------------------------------- helpers
   function rawUrl() {
@@ -88,8 +142,11 @@
   // ---------------------------------------------------------------- tabs
   function renderTabs() {
     if (dragging) { pendingRender = true; return; }
-    const box = $('#tabs');
+    const vertical = isVertical();
+    const box = vertical ? $('#sidetabs') : $('#tabs');
+    (vertical ? $('#tabs') : $('#sidetabs')).textContent = '';
     box.textContent = '';
+    const isAfter = (e, d) => (vertical ? e.offsetY > d.offsetHeight / 2 : e.offsetX > d.offsetWidth / 2);
     for (const t of S.tabs) {
       const fav = el('span', { class: 'fav' });
       if (t.loading) fav.innerHTML = '<i class="spin"></i>';
@@ -104,14 +161,14 @@
       d.addEventListener('dragover', (e) => {
         if (dragId == null) return;
         e.preventDefault();
-        const after = e.offsetX > d.offsetWidth / 2;
+        const after = isAfter(e, d);
         $$('.tab').forEach((n) => n.classList.remove('drop-before', 'drop-after'));
         d.classList.add(after ? 'drop-after' : 'drop-before');
       });
       d.addEventListener('drop', (e) => {
         e.preventDefault();
         if (dragId == null) return;
-        const after = e.offsetX > d.offsetWidth / 2;
+        const after = isAfter(e, d);
         const from = S.tabs.findIndex((n) => n.id === dragId);
         let to = S.tabs.findIndex((n) => n.id === t.id) + (after ? 1 : 0);
         if (from < to) to--;
@@ -130,6 +187,7 @@
     const box = el('div', {},
       mi('Reload', { fn: () => { call('tabs.select', { id: t.id }).then(() => call('nav.reload')); } }),
       mi('Duplicate', { fn: () => call('tabs.duplicate', { id: t.id }) }),
+      S.tabs.length > 1 ? mi('Move to new window', { fn: () => call('tabs.toWindow', { id: t.id }) }) : null,
       sep(),
       mi('Close tab', { fn: () => call('tabs.close', { id: t.id }) }),
       mi('Close other tabs', { fn: () => call('tabs.closeOthers', { id: t.id }) }));
@@ -236,6 +294,8 @@
       el('button', { class: 'btn', text: '+', onclick: () => call('zoom', { delta: 1 }) }));
     const box = el('div', {},
       mi('New tab', { icon: 'plus', key: 'Ctrl+T', fn: () => call('tabs.new') }),
+      mi('New window', { icon: 'window', key: 'Ctrl+N', fn: () => call('win.new') }),
+      mi('New private window', { icon: 'mask', key: 'Ctrl+Shift+N', fn: () => call('win.newPrivate') }),
       mi('Reopen closed tab', { key: 'Ctrl+Shift+T', fn: () => call('tabs.reopen') }),
       sep(),
       mi('Bookmark this page', { icon: 'star', key: 'Ctrl+D', fn: toggleStar }),
@@ -247,7 +307,9 @@
       mi('Developer tools', { key: 'F12', fn: () => call('devtools') }),
       sep(),
       mi('What do websites see?', { fn: () => call('openPage', { page: 'identity' }) }),
-      mi('Settings', { fn: () => call('openPage', { page: 'settings' }) }),
+      mi('Video (DRM) check', { fn: () => call('openPage', { page: 'identity', hash: 'drm' }) }),
+      mi('Appearance', { icon: 'palette', fn: () => call('openPage', { page: 'appearance' }) }),
+      mi('Settings', { key: 'Ctrl+,', fn: () => call('openPage', { page: 'settings' }) }),
       mi('Quit', { key: 'Ctrl+Q', fn: () => call('quit') }));
     const a = anchorBelow($('#menu'));
     openPopup(box, a.right, a.y, { alignRight: true, width: 280 });
@@ -307,6 +369,8 @@
 
   // ---------------------------------------------------------------- buttons
   $('#newtab').addEventListener('click', () => call('tabs.new'));
+  $('#newtab-side').addEventListener('click', () => call('tabs.new'));
+  $('#sidetoggle').addEventListener('click', () => call('appearance.set', { id: 'sideCollapsed', value: !(S.look && S.look.sidecollapsed === '1') }));
   $('#back').addEventListener('click', () => call('nav.back'));
   $('#forward').addEventListener('click', () => call('nav.forward'));
   $('#reload').addEventListener('click', () => call(S.loading ? 'nav.stop' : 'nav.reload'));
@@ -319,6 +383,7 @@
 
   // ---------------------------------------------------------------- state from main
   function render() {
+    applyLook();
     renderTabs();
     renderBar();
     $('#back').disabled = !S.canBack;
@@ -326,6 +391,7 @@
     $('#reload').innerHTML = icon(S.loading ? 'x' : 'reload');
     $('#progress').classList.toggle('on', !!S.loading);
     updateUrlBox();
+    queueLayout();
   }
 
   orbit.on('state', (s) => { S = s; render(); });
@@ -333,7 +399,6 @@
   orbit.on('find-open', openFind);
   orbit.on('find-close', () => { $('#findbar').hidden = true; });
   orbit.on('find', (r) => { $('#findcount').textContent = r.count ? r.active + ' / ' + r.count : ($('#findinput').value ? 'No matches' : ''); });
-  orbit.on('theme', (t) => { $('#theme').href = 'orbit://theme/current.css?t=' + t; });
   orbit.on('toggle-bookmark', toggleStar);
   orbit.on('toast', (msg) => {
     const t = $('#toast');
@@ -343,6 +408,10 @@
     toastTimer = setTimeout(() => { t.hidden = true; }, 4500);
   });
 
+  // A small surface for custom.js (Appearance > Advanced) to build on.
+  window.OrbitUI = { call, state: () => S, openPopup, closePopup, menuItem: mi, separator: sep, toast: (m) => { $('#toast').textContent = m; $('#toast').hidden = false; } };
+
+  buildWinctl();
   call('chrome.ready');
   syncLayout();
 })();

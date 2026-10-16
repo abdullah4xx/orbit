@@ -13,8 +13,18 @@ window.el = function (tag, attrs, ...kids) {
   kids.flat().forEach((c) => { if (c != null) n.append(c.nodeType ? c : document.createTextNode(c)); });
   return n;
 };
+/* Swaps the theme stylesheet without a flash: the new one loads next to the old one, then replaces it. */
+window.reloadTheme = function (stamp) {
+  const old = document.getElementById('theme');
+  if (!old) return;
+  const next = old.cloneNode();
+  next.removeAttribute('id');
+  next.href = 'orbit://theme/current.css?t=' + stamp;
+  next.onload = () => { old.remove(); next.id = 'theme'; };
+  next.onerror = () => next.remove();
+  old.after(next);
+};
 (function () {
-  const link = document.getElementById('theme');
-  if (window.orbit && link) window.orbit.on('theme', (t) => { link.href = 'orbit://theme/current.css?t=' + t; });
+  if (window.orbit) window.orbit.on('theme', (t) => window.reloadTheme(t));
 })();
 window.hue = function (s) { let h = 0; for (const c of String(s)) h = (h * 31 + c.charCodeAt(0)) % 360; return h; };

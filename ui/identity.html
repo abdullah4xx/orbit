@@ -7,6 +7,11 @@
   <p class="muted">This is what a page's JavaScript reads from the browser right now. Sites that refuse to play video on Linux look at exactly these values.</p>
   <div class="card" id="verdict"></div>
   <div class="card"><h2>Values</h2><div id="vals"></div></div>
+  <div class="card" id="drm"><h2>Protected video (Widevine DRM)</h2>
+    <p class="muted small">Courses and streaming sites encrypt their video. Playing it needs Widevine, which Orbit downloads the first time it runs (it needs internet once).</p>
+    <div id="drm-verdict"></div><div id="drm-rows"></div>
+    <div style="margin-top:10px"><button class="btn" id="drm-retry">Check again / retry download</button></div>
+  </div>
   <p class="muted small">Change the identity in <a href="orbit://settings/#identity">Settings</a>. Reload a site after changing it.</p>
 </div>
 <script src="orbit://ui/lib.js"></script><script src="orbit://ui/identity.js"></script>

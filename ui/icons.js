@@ -17,6 +17,23 @@
     chevron: '<path d="M9 6l6 6-6 6"/>',
     up: '<path d="M6 15l6-6 6 6"/>',
     down: '<path d="M6 9l6 6 6-6"/>',
+    close: '<path d="M6 6l12 12M18 6L6 18"/>',
+    download: '<path d="M12 4v11"/><path d="M7 11l5 5 5-5"/><path d="M5 19h14"/>',
+    trash: '<path d="M5 7h14"/><path d="M10 7V5h4v2"/><path d="M7 7l1 12h8l1-12"/><path d="M10 11v5M14 11v5"/>',
+    eye: '<path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6z"/><circle cx="12" cy="12" r="2.6"/>',
+    eyeoff: '<path d="M4 4l16 16"/><path d="M10 6.2A9 9 0 0 1 12 6c5.5 0 9 6 9 6a15 15 0 0 1-3.2 3.8M6.4 8C4.3 9.6 3 12 3 12s3.5 6 9 6c1.3 0 2.5-.3 3.6-.8"/><path d="M10 10a2.6 2.6 0 0 0 3.6 3.6"/>',
+    gear: '<circle cx="12" cy="12" r="3"/><path d="M12 3v2.2M12 18.8V21M3 12h2.2M18.8 12H21M5.6 5.6l1.6 1.6M16.8 16.8l1.6 1.6M18.4 5.6l-1.6 1.6M7.2 16.8l-1.6 1.6"/>',
+    phone: '<rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 18h2"/>',
+    image: '<rect x="4" y="5" width="16" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M5 17l5-4.5 3.5 3 2.5-2L20 16"/>',
+    pencil: '<path d="M5 19l1-4L16.5 4.5a2 2 0 0 1 3 3L9 18z"/><path d="M14.5 6.5l3 3"/>',
+    grid: '<rect x="4" y="4" width="6.5" height="6.5" rx="1.4"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.4"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.4"/><path d="M14 17l2.2 2.2L20 15"/>',
+    minimize: '<path d="M6 12h12"/>',
+    maximize: '<rect x="6" y="6" width="12" height="12" rx="1.5"/>',
+    restore: '<path d="M9 9V6h9v9h-3"/><rect x="6" y="9" width="9" height="9" rx="1.5"/>',
+    sidebar: '<rect x="4" y="5" width="16" height="14" rx="2"/><path d="M10 5v14"/>',
+    window: '<rect x="4" y="5" width="16" height="14" rx="2"/><path d="M4 9h16"/>',
+    mask: '<path d="M5 9c0-3 3-4 7-4s7 1 7 4v3c0 4-3 7-7 7s-7-3-7-7z"/><path d="M8 11h2M14 11h2"/>',
+    palette: '<path d="M12 4a8 8 0 1 0 0 16c1.4 0 2-.8 2-1.7 0-1.3-1-1.6-1-2.7 0-.9.7-1.6 1.7-1.6H17a3 3 0 0 0 3-3C20 6.5 16.5 4 12 4z"/><circle cx="8" cy="11" r=".9"/><circle cx="11" cy="7.5" r=".9"/><circle cx="15" cy="8" r=".9"/>',
   };
   window.icon = function (name) {
     return '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (P[name] || '') + '</svg>';
